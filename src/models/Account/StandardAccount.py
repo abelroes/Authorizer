@@ -1,10 +1,24 @@
 from dataclasses import dataclass
-import GenericAccount
+from models.Account.GenericAccount import GenericAccount
 from models.enums.AccountTypeEnum import AccountTypeEnum
 
 
 @dataclass
 class StandardAccount(GenericAccount):
-    account_type = AccountTypeEnum.STANDARD_ACCOUNT
-    card_status: bool = False
-    available_limit: int = 0
+    card_status: bool
+
+    @staticmethod
+    def from_dict(data: dict):
+        return StandardAccount(
+            account_type=AccountTypeEnum.STANDARD_ACCOUNT,
+            balance=data["account"]["available-limit"],
+            card_status=data["account"]["active-card"],
+        )
+
+    def to_dict(self):
+        return {
+            self.account_type.value: {
+                "active-card": self.card_status,
+                "available-limit": self.balance,
+            }
+        }
