@@ -4,7 +4,14 @@ from models.enums.TransactionTypeEnum import TransactionTypeEnum
 
 
 @dataclass
-class GenericTransaction():
+class GenericTransaction:
     transaction_type: TransactionTypeEnum
     amount: int
     time: datetime
+
+    @staticmethod
+    def from_dict(data: dict):
+        raise NotImplementedError
+
+    def to_dict(self):
+        raise NotImplementedError
