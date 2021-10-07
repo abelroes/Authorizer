@@ -1,5 +1,5 @@
 from functools import reduce
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 from models.Account.StandardAccount import StandardAccount
 from models.Transaction.DebitTransaction import DebitTransaction
@@ -64,7 +64,7 @@ def _has_transactions_in_last_2_minutes(
         list(
             map(
                 lambda it: _time_difference_in_minutes(trans.time, it.time)
-                <= diff_minutes,
+                <= timedelta(minutes=diff_minutes),
                 _last_three_transactions(trans_hist),
             )
         ),
@@ -78,7 +78,7 @@ def _has_last_transactions_doubled(
         lambda a, b: a and b,
         list(
             map(
-                lambda it: _compare_transactions(trans.time, it.time),
+                lambda it: _compare_transactions(trans, it),
                 _last_three_transactions(trans_hist),
             )
         ),

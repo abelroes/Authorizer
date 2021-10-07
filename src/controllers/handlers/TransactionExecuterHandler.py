@@ -37,7 +37,9 @@ def _convert_dict_to_account(acc: dict) -> StandardAccount:
 def _save_account_changes(acc: GenericAccount, trans: GenericTransaction) -> None:
     acc.balance = acc.balance - trans.amount
     get_db().set_value(EntityKeyEnum.ACCOUNT_KEY.value, acc.to_dict())
-    get_db().extend_value(EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict())
+    get_db().append_value_or_create(
+        EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict()
+    )
 
 
 def _get_transaction_history() -> List[GenericTransaction]:
@@ -56,8 +58,8 @@ def _verify_transaction_violations(
     acc: GenericAccount, trans: GenericTransaction, trans_hist: List[GenericTransaction]
 ) -> List[str]:
     violations = []
-    violations.append(validate_account_for_transaction(acc is not None))
-    violations.append(validate_transaction_operation(acc, trans, trans_hist))
+    violations.extend(validate_account_for_transaction(acc is not None))
+    violations.extend(validate_transaction_operation(acc, trans, trans_hist))
     return violations
 
 

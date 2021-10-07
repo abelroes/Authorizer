@@ -1,3 +1,8 @@
+from datetime import datetime
+from models.formaters.DatetimeFormater import (
+    format_datetime_to_str,
+    format_str_to_datetime,
+)
 from models.Transaction.GenericTransaction import GenericTransaction
 from dataclasses import dataclass
 from models.enums.TransactionTypeEnum import TransactionTypeEnum
@@ -13,7 +18,7 @@ class DebitTransaction(GenericTransaction):
         return DebitTransaction(
             transaction_type=transaction_type,
             amount=data[transaction_type.value]["amount"],
-            time=data[transaction_type.value]["time"],
+            time=format_str_to_datetime(data[transaction_type.value]["time"]),
             merchant=data[transaction_type.value]["merchant"],
         )
 
@@ -22,6 +27,6 @@ class DebitTransaction(GenericTransaction):
             self.transaction_type.value: {
                 "merchant": self.merchant,
                 "amount": self.amount,
-                "time": self.time,
+                "time": format_datetime_to_str(self.time),
             }
         }

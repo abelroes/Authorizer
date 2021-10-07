@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 from decorators.singleton import singleton
 from adapters.GenericDatabaseAdapter import GenericDatabaseAdapter
 
@@ -21,5 +21,8 @@ class DictDBAdapter(GenericDatabaseAdapter):
         else:
             return False
 
-    def extend_value(self, key: Any, value: Any) -> None:
-        self.set_value(key, self.get_value(key).extend(value))
+    def append_value_or_create(self, key: Any, value: Any) -> None:
+        if self.get_value(key) is None:
+            self.set_value(key, [value])
+        else:
+            self.set_value(key, self.get_value(key).extend(value))
