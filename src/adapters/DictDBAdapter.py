@@ -21,5 +21,5 @@ class DictDBAdapter(GenericDatabaseAdapter):
         else:
             return False
 
-    def append_value(self, key: Any, value: Any) -> None:
-        self.set_value(key, self.get_value(key).append(value))
+    def extend_value(self, key: Any, value: Any) -> None:
+        self.set_value(key, self.get_value(key).extend(value))

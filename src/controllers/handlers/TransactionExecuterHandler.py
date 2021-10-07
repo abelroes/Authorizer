@@ -29,17 +29,24 @@ def _get_account() -> GenericAccount:
     return get_db().get_value(AccountTypeEnum.STANDARD_ACCOUNT.value)
 
 
+def _convert_dict_to_account(acc: dict) -> StandardAccount:
+    return StandardAccount.from_dict(acc)
+
+
 def _save_account_changes(acc: GenericAccount, trans: GenericTransaction) -> None:
     acc.balance = acc.balance - trans.amount
     get_db().set_value(EntityKeyEnum.ACCOUNT_KEY.value, acc.to_dict())
-    get_db().append_value(EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict())
+    get_db().extend_value(EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict())
 
 
 def _get_transaction_history() -> List[GenericTransaction]:
+    transaction_history = get_db().get_value(
+        EntityKeyEnum.TRANSACTION_HISTORY_KEY.value
+    )
     return list(
         map(
-            lambda it: convert_dict_to_transaction(it),
-            get_db().get_value(EntityKeyEnum.TRANSACTION_HISTORY_KEY.value),
+            lambda it: _convert_dict_to_transaction(it),
+            transaction_history if transaction_history else [],
         )
     )
 
