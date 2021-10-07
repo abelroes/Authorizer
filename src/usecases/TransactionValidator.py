@@ -90,7 +90,7 @@ def _last_three_transactions(trans_hist: List[GenericTransaction]) -> List[str]:
 
 
 def _time_difference_in_minutes(a: datetime, b: datetime) -> int:
-    return abs(a.min - b.min)
+    return abs(a - b)
 
 
 def _compare_transactions(a: GenericTransaction, b: GenericTransaction) -> bool:
