@@ -1,3 +1,3 @@
-docker build -t nuteste .
+docker build -t authorizer .
 clear
-docker run -i nuteste < ../operations
+docker run -i authorizer < ../operations
