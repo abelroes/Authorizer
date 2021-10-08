@@ -1,12 +1,12 @@
 from typing import List, Set
+from usecases.validations.AccountIsActiveValidator import validate_account_is_initialized
+from usecases.Transaction.TransactionValidator import validate_transaction_operation
 from controllers.formaters.SetFormater import remove_none_from_set
 from models.Account.StandardAccount import StandardAccount
 from models.enums.AccountTypeEnum import AccountTypeEnum
 from models.Transaction.GenericTransaction import GenericTransaction
 from models.Account.GenericAccount import GenericAccount
 from models.Transaction.DebitTransaction import DebitTransaction
-from usecases.AccountValidator import validate_account_for_transaction
-from usecases.TransactionValidator import validate_transaction_operation
 from controllers.persistence.PersistenceController import get_db, EntityKeyEnum
 
 
@@ -61,7 +61,7 @@ def _get_transaction_history() -> List[GenericTransaction]:
 def _verify_transaction_violations(
     acc: GenericAccount, trans: GenericTransaction, trans_hist: Set[GenericTransaction]
 ) -> Set[str]:
-    violations = {validate_account_for_transaction(acc is not None)}
+    violations = {validate_account_is_initialized(acc is not None)}
     violations.update(validate_transaction_operation(acc, trans, trans_hist))
     return violations
 

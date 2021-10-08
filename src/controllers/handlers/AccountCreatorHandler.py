@@ -1,8 +1,8 @@
 from typing import List, Set
+from usecases.Account.AccountValidator import validate_account_operation
 from controllers.formaters.SetFormater import remove_none_from_set
 from models.Account.GenericAccount import GenericAccount
 from controllers.persistence.PersistenceController import get_db, EntityKeyEnum
-from usecases.AccountValidator import validate_account_operation
 from models.Account.StandardAccount import StandardAccount
 
 

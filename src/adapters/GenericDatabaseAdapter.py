@@ -13,3 +13,6 @@ class GenericDatabaseAdapter:
 
     def set_value_if_not_exists(self, key: Any, value: Any) -> bool:
         raise NotImplementedError
+
+    def remove_key(self, key: Any) -> None:
+        raise NotImplementedError

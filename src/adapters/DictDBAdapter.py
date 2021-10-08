@@ -20,6 +20,12 @@ class DictDBAdapter(GenericDatabaseAdapter):
             return True
         else:
             return False
+    
+    def remove_key(self, key: Any) -> None:
+        try:
+            self.dictMap.pop(key)
+        except(KeyError) as err:
+            pass
 
     def append_value_or_create(self, key: Any, new_value: Any) -> None:
         saved_value: List = self.get_value(key)
