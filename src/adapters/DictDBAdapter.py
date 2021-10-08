@@ -21,8 +21,10 @@ class DictDBAdapter(GenericDatabaseAdapter):
         else:
             return False
 
-    def append_value_or_create(self, key: Any, value: Any) -> None:
-        if self.get_value(key) is None:
-            self.set_value(key, [value])
+    def append_value_or_create(self, key: Any, new_value: Any) -> None:
+        saved_value: List = self.get_value(key)
+        if saved_value is None:
+            self.set_value(key, [new_value])
         else:
-            self.set_value(key, self.get_value(key).extend(value))
+            saved_value.append(new_value)
+            self.set_value(key, saved_value)

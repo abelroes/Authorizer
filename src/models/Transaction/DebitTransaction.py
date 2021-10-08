@@ -1,4 +1,3 @@
-from datetime import datetime
 from models.formaters.DatetimeFormater import (
     format_datetime_to_str,
     format_str_to_datetime,

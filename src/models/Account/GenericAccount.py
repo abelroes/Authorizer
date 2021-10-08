@@ -13,3 +13,6 @@ class GenericAccount:
 
     def to_dict(self):
         raise NotImplementedError
+
+    def change_balance(self, balance: int) -> None:
+        self.balance = balance

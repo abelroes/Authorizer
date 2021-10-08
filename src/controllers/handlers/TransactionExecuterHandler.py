@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Set
+from controllers.formaters.SetFormater import remove_none_from_set
 from models.Account.StandardAccount import StandardAccount
 from models.enums.AccountTypeEnum import AccountTypeEnum
 from models.Transaction.GenericTransaction import GenericTransaction
@@ -16,9 +17,9 @@ def handle_transaction(transaction_operation: dict) -> dict:
     violations = _verify_transaction_violations(
         saved_account, transaction, transaction_history
     )
+    if len(remove_none_from_set(violations)) == 0:
+        saved_account = _save_account_changes(saved_account, transaction)
     validation_result = format_validation_result(violations, saved_account)
-    if len(violations) == 0:
-        _save_account_changes(saved_account, transaction)
     return validation_result
 
 
@@ -31,15 +32,18 @@ def _get_account() -> GenericAccount:
 
 
 def _convert_dict_to_account(acc: dict) -> StandardAccount:
-    return StandardAccount.from_dict(acc)
+    return StandardAccount.from_dict(acc) if acc else None
 
 
-def _save_account_changes(acc: GenericAccount, trans: GenericTransaction) -> None:
-    acc.balance = acc.balance - trans.amount
+def _save_account_changes(
+    acc: GenericAccount, trans: GenericTransaction
+) -> GenericAccount:
+    acc.change_balance(acc.balance - trans.amount)
     get_db().set_value(EntityKeyEnum.ACCOUNT_KEY.value, acc.to_dict())
     get_db().append_value_or_create(
         EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict()
     )
+    return acc
 
 
 def _get_transaction_history() -> List[GenericTransaction]:
@@ -55,17 +59,14 @@ def _get_transaction_history() -> List[GenericTransaction]:
 
 
 def _verify_transaction_violations(
-    acc: GenericAccount, trans: GenericTransaction, trans_hist: List[GenericTransaction]
-) -> List[str]:
-    violations = []
-    violations.extend(validate_account_for_transaction(acc is not None))
-    violations.extend(validate_transaction_operation(acc, trans, trans_hist))
+    acc: GenericAccount, trans: GenericTransaction, trans_hist: Set[GenericTransaction]
+) -> Set[str]:
+    violations = {validate_account_for_transaction(acc is not None)}
+    violations.update(validate_transaction_operation(acc, trans, trans_hist))
     return violations
 
 
-def format_validation_result(
-    violation_list: List[str], account: GenericAccount
-) -> List[dict]:
-    validation_result = account.to_dict()
-    validation_result["violations"] = violation_list
+def format_validation_result(violation_set: Set[str], account: GenericAccount) -> dict:
+    validation_result = account.to_dict() if account else {"account": {}}
+    validation_result["violations"] = list(remove_none_from_set(violation_set))
     return validation_result

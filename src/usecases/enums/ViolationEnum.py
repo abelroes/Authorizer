@@ -7,4 +7,4 @@ class ViolationEnum(Enum):
     CARD_NOT_ACTIVE = "card-not-active"
     INSUFFICIENT_LIMIT = "insufficient-limit"
     HIGH_FREQUENCY = "high-frequency-small-interval"
-    DOUBLE_TRANSACTION = "double-transaction"
+    DOUBLE_TRANSACTION = "doubled-transaction"

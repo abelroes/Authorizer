@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Set
+from controllers.formaters.SetFormater import remove_none_from_set
 from models.Account.GenericAccount import GenericAccount
 from controllers.persistence.PersistenceController import get_db, EntityKeyEnum
 from usecases.AccountValidator import validate_account_operation
@@ -19,14 +20,14 @@ def convert_dict_to_account(acc: dict) -> GenericAccount:
 
 
 def is_account_already_exists(account: StandardAccount) -> bool:
-    not get_db().set_value_if_not_exists(
+    return not get_db().set_value_if_not_exists(
         EntityKeyEnum.ACCOUNT_KEY.value, account.to_dict()
     )
 
 
 def format_validation_result(
-    violation_list: List[str], account: GenericAccount
+    violation_set: Set[str], account: GenericAccount
 ) -> List[dict]:
     validation_result = account.to_dict()
-    validation_result["violations"] = violation_list
+    validation_result["violations"] = list(remove_none_from_set(violation_set))
     return validation_result
