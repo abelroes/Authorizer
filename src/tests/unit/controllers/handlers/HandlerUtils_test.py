@@ -12,7 +12,7 @@ from models.Account.StandardAccount import StandardAccount
 from models.enums.AccountTypeEnum import AccountTypeEnum
 
 
-class TestHandlerUtils():
+class TestHandlerUtils:
 
     def setup_class(self):
         date_and_time = "2019-02-13T10:00:00.000Z"
@@ -23,7 +23,7 @@ class TestHandlerUtils():
         )
         self.debit_transaction = DebitTransaction(
             TransactionTypeEnum.DEBIT,
-            10,
+            20,
             format_str_to_datetime(date_and_time),
             "Burger King"
         )
@@ -48,7 +48,7 @@ class TestHandlerUtils():
 
         assert convert_dict_to_account(acc_dict) == self.standard_account
 
-    def test_convert_dict_to_account_with_None_value(self):
+    def test_convert_dict_to_account_with_none_value(self):
         acc_dict = None
         assert convert_dict_to_account(acc_dict) is None
 
@@ -75,7 +75,7 @@ class TestHandlerUtils():
         assert reduce(lambda a, b: a and b, list(
             map(lambda it: it in list(expected_dict['violations']), result['violations'])))
 
-    def test_format_validation_result_with_filled_violations_and_None_value(self):
+    def test_format_validation_result_with_filled_violations_and_none_value(self):
         violations = {'some_violation',
                       'some_other_violation', 'another_one', None}
         expected_dict = {'account': {'active-card': True, 'available-limit': 100},
@@ -86,7 +86,7 @@ class TestHandlerUtils():
         assert reduce(lambda a, b: a and b, list(
             map(lambda it: it in list(expected_dict['violations']), result['violations'])))
 
-    def test_format_validation_result_with_None_value_in_violations_set(self):
+    def test_format_validation_result_with_none_value_in_violations_set(self):
         violations = {None}
         expected_dict = {'account': {'active-card': True, 'available-limit': 100},
                          'violations': []}
@@ -94,7 +94,7 @@ class TestHandlerUtils():
         assert format_validation_result(
             violations, self.standard_account) == expected_dict
 
-    def test_format_validation_result_with_None_value_as_violations(self):
+    def test_format_validation_result_with_none_value_as_violations(self):
         violations = None
 
         with pytest.raises(TypeError):
@@ -108,7 +108,7 @@ class TestHandlerUtils():
             format_validation_result(
                 violations, StandardAccount())
 
-    def test_format_validation_result_with_None_value_as_account(self):
+    def test_format_validation_result_with_none_value_as_account(self):
         violations = {}
 
         with pytest.raises(TypeError):
@@ -116,13 +116,12 @@ class TestHandlerUtils():
                 violations, None)
 
     def test_convert_dict_to_transaction(self):
-        transaction_dict = {"transaction": {"merchant": "Burger King",
-                                            "amount": 10, "time": "2019-02-13T10:00:00.000Z"}}
+        transaction_dict = self.transaction_history[0]
 
         assert convert_dict_to_transaction(
             transaction_dict) == self.debit_transaction
 
-    def test_convert_dict_to_transaction_with_None_value(self):
+    def test_convert_dict_to_transaction_with_none_value(self):
         with pytest.raises(TypeError):
             convert_dict_to_transaction(None)
 
@@ -145,7 +144,7 @@ class TestHandlerUtils():
 
     def test_get_saved_account_not_existing_one_in_db(self):
         self.teardown_class()
-        assert get_saved_account() == None
+        assert get_saved_account() is None
 
     def test_get_transaction_history_not_existing_one_in_db(self):
         self.teardown_class()

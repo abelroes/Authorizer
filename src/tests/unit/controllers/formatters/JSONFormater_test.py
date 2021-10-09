@@ -31,7 +31,7 @@ def test_convert_json_to_dict_fails_with_invalid_json_string():
         convert_json_to_dict(json_str)
 
 
-def test_convert_json_to_dict_fails_with_None_json_string():
+def test_convert_json_to_dict_fails_with_none_json_string():
     json_str = None
 
     with pytest.raises(TypeError):
@@ -45,7 +45,7 @@ def test_convert_dict_to_json_converts_value():
     assert convert_dict_to_json(dict) == expected_json_str
 
 
-def test_convert_dict_to_json_None_to_null():
+def test_convert_dict_to_json_none_to_null():
     dict = None
 
     assert convert_dict_to_json(dict) == "null"

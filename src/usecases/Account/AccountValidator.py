@@ -3,7 +3,5 @@ from usecases.validations.AccountShouldExistValidator import validate_account_sh
 from models.Account.GenericAccount import GenericAccount
 
 
-def validate_account_operation(
-    account_already_existed: bool, account: GenericAccount
-) -> Set[str]:
+def validate_account_operation(account_already_existed: bool) -> Set[str]:
     return {validate_account_should_exist(account_already_existed)}

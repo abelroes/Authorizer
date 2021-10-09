@@ -24,7 +24,8 @@ class DictDBAdapter(GenericDatabaseAdapter):
     def remove_key(self, key: Any) -> None:
         try:
             self.dictMap.pop(key)
-        except(KeyError) as err:
+        except KeyError:
+            # There's no need to raise this error
             pass
 
     def append_value_or_create(self, key: Any, new_value: Any) -> None:

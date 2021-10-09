@@ -3,7 +3,7 @@ from controllers.handlers.AuthorizerHandler import authorize_operation, handle_i
 from controllers.persistence.PersistenceController import get_db
 
 
-class TestAuthorizerHandlerIntegration():
+class TestAuthorizerHandlerIntegration:
 
     def setup_class(self):
         self.operations_list = [
@@ -34,7 +34,7 @@ class TestAuthorizerHandlerIntegration():
 
         assert handle_input(expected_output) == expected_output
 
-    def test_handle_input_None_list(self):
+    def test_handle_input_none_list(self):
         with pytest.raises(TypeError):
             handle_input(None)
 
