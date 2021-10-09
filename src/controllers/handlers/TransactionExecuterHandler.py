@@ -2,7 +2,7 @@ from typing import Set
 from controllers.handlers.AccountCreatorHandler import convert_dict_to_account
 from controllers.handlers.HandlerUtils import (
     convert_dict_to_transaction, format_validation_result,
-    get_account, get_transaction_history, save_account_changes
+    get_saved_account, get_transaction_history, save_account_changes
 )
 from usecases.validations.AccountIsActiveValidator import validate_account_is_initialized
 from usecases.Transaction.TransactionValidator import validate_transaction_operation
@@ -12,7 +12,7 @@ from models.Account.GenericAccount import GenericAccount
 
 
 def handle_transaction(transaction_operation: dict) -> dict:
-    saved_account = convert_dict_to_account(get_account())
+    saved_account = convert_dict_to_account(get_saved_account())
     transaction = convert_dict_to_transaction(transaction_operation)
     violations = _verify_transaction_violations(
         acc=saved_account,

@@ -8,14 +8,18 @@ from models.Transaction.DebitTransaction import DebitTransaction
 from controllers.persistence.PersistenceController import get_db, EntityKeyEnum
 
 
-# def convert_dict_to_account(acc: dict) -> GenericAccount:
-#     return StandardAccount.from_dict(acc)
-
-
 def is_account_already_exists(account: StandardAccount) -> bool:
     return not get_db().set_value_if_not_exists(
         EntityKeyEnum.ACCOUNT_KEY.value, account.to_dict()
     )
+
+
+def convert_dict_to_account(acc: dict) -> StandardAccount:
+    return StandardAccount.from_dict(acc) if acc else None
+
+
+def convert_dict_to_transaction(trans: dict) -> DebitTransaction:
+    return DebitTransaction.from_dict(trans)
 
 
 def format_validation_result(violation_set: Set[str], account: GenericAccount) -> dict:
@@ -24,27 +28,8 @@ def format_validation_result(violation_set: Set[str], account: GenericAccount) -
     return validation_result
 
 
-def convert_dict_to_transaction(trans: dict) -> DebitTransaction:
-    return DebitTransaction.from_dict(trans)
-
-
-def get_account() -> GenericAccount:
+def get_saved_account() -> GenericAccount:
     return get_db().get_value(AccountTypeEnum.STANDARD_ACCOUNT.value)
-
-
-def convert_dict_to_account(acc: dict) -> StandardAccount:
-    return StandardAccount.from_dict(acc) if acc else None
-
-
-def save_account_changes(
-    acc: GenericAccount, trans: GenericTransaction
-) -> GenericAccount:
-    acc.change_balance(acc.balance - trans.amount)
-    get_db().set_value(EntityKeyEnum.ACCOUNT_KEY.value, acc.to_dict())
-    get_db().append_value_or_create(
-        EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict()
-    )
-    return acc
 
 
 def get_transaction_history() -> List[GenericTransaction]:
@@ -57,3 +42,14 @@ def get_transaction_history() -> List[GenericTransaction]:
             transaction_history if transaction_history else [],
         )
     )
+
+
+def save_account_changes(
+    acc: GenericAccount, trans: GenericTransaction
+) -> GenericAccount:
+    acc.change_balance(acc.balance - trans.amount)
+    get_db().set_value(EntityKeyEnum.ACCOUNT_KEY.value, acc.to_dict())
+    get_db().append_value_or_create(
+        EntityKeyEnum.TRANSACTION_HISTORY_KEY.value, trans.to_dict()
+    )
+    return acc
