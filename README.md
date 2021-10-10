@@ -46,7 +46,7 @@ python3 -m pip install -r requirements.txt
 
 > fonte: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 
-Esse processo instalará o `pytest` no ambiente virtual para que seja possível rodar os testes manualmente.
+Esse processo instalará o `pytest` no ambiente virtual para que seja possível rodar os testes manualmente:
 
 ```shell
 cd src/
@@ -99,7 +99,7 @@ Diretório que abriga os testes da aplicação.
 #### Polimorfismo
 Procurou-se escrever o sistema utilizando mais funções do que definições de classes e objetos. Contudo, em alguns momentos, pareceu adequado lançar mão de utilizar polimorfismo em algumas classes e tipos.
 
-Apesar de Python ser uma linguagem dinamicamente tipada, é de bom tom deixar definidos os tipos esperados de entrada e saída de cada função, para que a leitura e manutenção do código seja mais fácil. Por isso, utilizar o polimorfismo permite que classes mais internas (ex.:_usecases_) não se preocupem com especificações de tipos de objetos transacionados, mas definam o escopo genérico esperado _(ex.: `GenericAccount -> StandardAccount`)_.
+Apesar de Python ser uma linguagem dinamicamente tipada, é de bom tom deixar definidos os tipos esperados de entrada e saída de cada função, para que a leitura e manutenção do código seja mais fácil. Por isso, utilizar o polimorfismo permite que classes mais internas (ex.:_usecases_) não se preocupem com especificações de tipos de objetos transacionados, mas definam o escopo genérico esperado _(ex.: `GenericAccount -> StandardAccount`)_, enquanto mantém a legibilidade.
 
 #### Banco de Dados
 Optou-se por utilizar um dicionário em memória para o armazenamento de dados de conta e histórico de transações validadas. Isso permite fácil gerenciamento e rapidez na recuperação dos dados via mecanismo de chave-valor.
