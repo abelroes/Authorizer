@@ -95,9 +95,11 @@ python3 -m pytest
 Para rodar o projeto, é necessário preparar um arquivo `operations` contendo as entradas e rodar os seguintes comandos:
 ```shell
 docker build --no-cache -t authorizer .
+
+# Definir path correto para o comando abaixo
 docker run -i authorizer < PATH_TO_operations_FILE
 ```
-Está incluído o script `buildAndRun.sh`, que considera um arquivo `operations` _(não incluso)_ dentro do diretório raiz do projeto.
+Pode ser executado o script `buildAndRun.sh`, que considera um arquivo `operations` _(não incluso)_ dentro do diretório raiz do projeto.
 
 ### Arquitetura e Decisões Técnicas
 
