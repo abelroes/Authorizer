@@ -81,7 +81,7 @@ Separados em _formaters_, _handlers_ e _persistence_. Controlam fluxo, conversã
 Destaque para a classe `OperationMapper`, que bifurca o fluxo logo no início, utilizando tipos diferentes de operações para decidir para qual função delegar o tratamento dos dados.
 
 ###### Decorators
-Abrigam definições customizadas de _decorators_ que podem ser usados como _synthatic sugar_ e adicionar mecanismos a outras funções. A exemplo, o decorator `@singleton`.
+Abrigam definições customizadas de _decorators_ que podem ser usados como _synthatic sugar_, adicionando mecanismos a outras funções. A exemplo, o decorator `@singleton`.
 
 ###### Models
 Abriga _dataclasses_ que representam entidades dentro da aplicação. Definem o formato de dados que as operações têm para utilização pelos _controllers_ e _usecases_.
