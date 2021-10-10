@@ -105,7 +105,7 @@ Apesar de Python ser uma linguagem dinamicamente tipada, é de bom tom deixar de
 Optou-se por utilizar um dicionário em memória para o armazenamento de dados de conta e histórico de transações validadas. Isso permite fácil gerenciamento e rapidez na recuperação dos dados via mecanismo de chave-valor.
 
 #### Singleton
-Para que a gestão da instância do banco de dados escolhido fosse mais prática, utilizou-se o _design pattern ~Singleton~_ para que, em qualquer parte do código, estivesse facilmente disponível a instância válida do banco. Além disso, a utilização do decorator `@singleton` torna a adição dessa capacidade mais elegante.
+Para que a gestão da instância do banco de dados escolhido fosse mais prática, utilizou-se o _design pattern Singleton_ para que, em qualquer parte do código, estivesse facilmente disponível a instância válida do banco. Além disso, a utilização do decorator `@singleton` torna a adição dessa capacidade mais elegante.
 
 ### Frameworks e Bibliotecas
 Além do `pytest` utilizado para os testes, foram usadas, somente, as bibliotecas disponibilizadas pelo Python 3.8. Exemplos são `json`, `datetieme`, `uuid`, `typing`, `dataclass` e outras.
