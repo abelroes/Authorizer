@@ -70,7 +70,7 @@ O projeto está organizado utilizando a seguinte árvore de diretórios:
 Início da execução da aplicação. Recebe o arquivo via _stdin_, delegando a digestão para _adapters_ e o processamento para _controllers_.
 
 ###### Adapters
-Responsáveis por reconhecer o "mundo exterior", definindo qual banco de dados será utilizado, como são as entradas e saídas do projeto, etc.
+Responsáveis por intermediar o "mundo exterior", definindo qual banco de dados será utilizado, como são as entradas e saídas do projeto, etc.
 Concentram a maior parte das operações que gerenciam _side-effects_ da aplicação.
 
 ###### Controllers
