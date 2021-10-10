@@ -67,7 +67,7 @@ Está incluído o script `buildAndRun.sh`, que considera um arquivo `operations`
 O projeto está organizado utilizando a seguinte árvore de diretórios:
 
 ###### Main
-Início da execução da aplicação. Recebe o arquivo via _stdin_, delega a digestão para _adapters_ e o processamento para _controllers_.
+Início da execução da aplicação. Recebe o arquivo via _stdin_, delegando a digestão para _adapters_ e o processamento para _controllers_.
 
 ###### Adapters
 Responsáveis por reconhecer o "mundo exterior", definindo qual banco de dados será utilizado, como são as entradas e saídas do projeto, etc.
