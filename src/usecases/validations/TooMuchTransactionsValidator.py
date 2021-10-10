@@ -1,5 +1,7 @@
-from typing import List, Set
-from usecases.Transaction.TransactionValidationUtils import has_transactions_in_last_2_minutes, last_three_transactions
+from typing import List
+from usecases.Transaction.TransactionValidationUtils import (
+    has_transactions_in_last_2_minutes, last_three_transactions
+)
 from models.Transaction.GenericTransaction import GenericTransaction
 from usecases.enums.ViolationEnum import ViolationEnum
 

@@ -8,6 +8,6 @@ def handle_create_account(account_operation: dict) -> dict:
     account = convert_dict_to_account(account_operation)
     account_already_existed = is_account_already_exists(account)
     validation_result = format_validation_result(
-        validate_account_operation(account_already_existed, account), account
+        validate_account_operation(account_already_existed), account
     )
     return validation_result

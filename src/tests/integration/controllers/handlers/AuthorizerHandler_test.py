@@ -1,4 +1,5 @@
 import pytest
+from usecases.enums.ViolationEnum import ViolationEnum
 from controllers.handlers.AuthorizerHandler import authorize_operation, handle_input
 from controllers.persistence.PersistenceController import get_db
 
@@ -63,6 +64,8 @@ class TestAuthorizerHandlerIntegration:
 
     def test_authorize_fail_account_operation(self):
         expected_output = {'account': {
-            'active-card': True, 'available-limit': 100}, 'violations': ['account-already-initialized']}
+            'active-card': True, 'available-limit': 100},
+            'violations': [ViolationEnum.ACCOUNT_ALREADY_EXISTS.value]
+        }
 
         assert authorize_operation(self.operations_list[0]) == expected_output
