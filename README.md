@@ -84,33 +84,29 @@ Destaque para a classe `OperationMapper`, que bifurca o fluxo logo no início, u
 Abrigam definições customizadas de _decorators_ que podem ser usados como _synthatic sugar_, adicionando mecanismos a outras funções. A exemplo, o decorator `@singleton`.
 
 ###### Models
-Abriga _dataclasses_ que representam entidades dentro da aplicação. Definem o formato de dados que as operações têm para utilização pelos _controllers_ e _usecases_.
+Abriga _dataclasses_ que representam entidades dentro da aplicação. Definem o formato de dados das operações para utilização pelos _controllers_ e _usecases_.
 
 ###### Usecases
-São as funções de regra de negócio. Todas as violações ou não de cada operação é decidida pelas funções abrigadas nesse diretório.
-
-Também abriga as definições das violações.
-
-Não executa nenhum tratamento de dados.
+São as funções de regra de negócio, abrigando as definições das violações. Todas as violações de cada operação são decididas pelas funções nesse diretório.
 
 ###### Tests
-Diretório que abriga os testes da aplicação.
+Diretório contendo os testes da aplicação.
 
 #### Polimorfismo
-Procurou-se escrever o sistema utilizando mais funções do que definições de classes e objetos. Contudo, em alguns momentos, pareceu adequado lançar mão de utilizar polimorfismo em algumas classes e tipos.
+Apesar de Python ser uma linguagem dinamicamente tipada e o sistema ter sido escrito priorizando funções, optou-se por utilizar definições de classes com polimorfismo em alguns casos, a fim de facilitar a legibilidade e manutenção do código.
 
-Apesar de Python ser uma linguagem dinamicamente tipada, é de bom tom deixar definidos os tipos esperados de entrada e saída de cada função, para que a leitura e manutenção do código seja mais fácil. Por isso, utilizar o polimorfismo permite que classes mais internas (ex.:_usecases_) não se preocupem com especificações de tipos de objetos transacionados, mas definam o escopo genérico esperado _(ex.: `GenericAccount -> StandardAccount`)_, enquanto mantém a legibilidade.
+Por exemplo, ao definir os tipos esperados de entrada e saída de cada função, o polimorfismo permite que classes mais internas (ex.:_usecases_) não se preocupem com especificações de tipos de objetos transacionados, mas definam o escopo genérico esperado _(ex.: `GenericAccount -> StandardAccount`)_.
 
 #### Banco de Dados
-Optou-se por utilizar um dicionário em memória para o armazenamento de dados de conta e histórico de transações validadas. Isso permite fácil gerenciamento e rapidez na recuperação dos dados via mecanismo de chave-valor.
+Utilizou-se um dicionário em memória para o armazenamento de dados de conta e histórico de transações validadas, permitindo fácil gerenciamento e rapidez na recuperação e persistência dos dados via mecanismo de chave-valor.
 
 #### Singleton
 Para que a gestão da instância do banco de dados escolhido fosse mais prática, utilizou-se o _design pattern Singleton_ para que, em qualquer parte do código, estivesse facilmente disponível a instância válida do banco. Além disso, a utilização do decorator `@singleton` torna a adição dessa capacidade mais elegante.
 
 ### Frameworks e Bibliotecas
-Além do `pytest` utilizado para os testes, foram usadas, somente, as bibliotecas disponibilizadas pelo Python 3.8. Exemplos são `json`, `datetieme`, `uuid`, `typing`, `dataclass` e outras.
+Além do `pytest` utilizado para os testes, foram usadas somente as bibliotecas disponibilizadas pelo Python 3.8. Exemplos são `json`, `datetieme`, `uuid`, `typing`, `dataclass`.
 
 ### Outras observações
-A aplicação analisa as operações individualmente, mas processa o arquivo por inteiro. Isso significa que a resposta sai uma vez por _input_ de arquivo. Essa opção foi eleita por facilitar a gestão do estado da aplicação (que deve ser nova a cada novo arquivo de entrada) e tornar mais _clean_ o processo de análise das opeprações.
+A aplicação analisa as operações individualmente, mas processa o arquivo por inteiro. Isso significa que a resposta sai uma vez por _input_ de arquivo. Essa opção foi eleita por facilitar a gestão do estado da aplicação (que deve ser novo a cada arquivo de entrada) e tornar mais _clean_ o processo de análise das operações.
 
-Uma otimização poderia ser feita, caso o tamanho do arquivo crescesse muito e a resposta fosse, necessariamente e individualmente, mais urgente. Dessa forma, o retorno deveria ser individual.
+Uma otimização poderia ser feita, caso o tamanho do arquivo crescesse muito e a resposta fosse mais urgente para cada operação. Dessa forma, o retorno deveria ser individual.
