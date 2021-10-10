@@ -1,5 +1,9 @@
 # Authorizer
 
+>
+> Para visualizar melhor este README, fora do GitHub, utilize o [Markdown Live Preview](https://markdownlivepreview.com/)
+>
+
 Sistema de autorização de operações de criação de conta e transações com cartão.
 
 <details>
