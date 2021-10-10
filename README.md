@@ -76,7 +76,7 @@ Concentram a maior parte das operações que gerenciam _side-effects_ da aplica�
 ###### Controllers
 Separados em _formaters_, _handlers_ e _persistence_. Controlam fluxo, conversão de dados de entrada para camadas mais internas da aplicação (ex.: _models_ e _usecases_) e dados de saída para que _adapters_ possam realizar as ações de _output_.
 
-É a última camada que deveria tolerar métodos que causem `side-effects`.
+É a última camada que deveria tolerar métodos que causem _side-effects_.
 
 Destaque para a classe `OperationMapper`, que bifurca o fluxo logo no início, utilizando tipos diferentes de operações para decidir para qual função delegar o tratamento dos dados.
 
