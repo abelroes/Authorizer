@@ -1,4 +1,5 @@
 import pytest
+from usecases.enums.ViolationEnum import ViolationEnum
 from controllers.handlers.AccountCreatorHandler import handle_create_account
 from controllers.persistence.PersistenceController import EntityKeyEnum, get_db
 
@@ -19,8 +20,13 @@ class TestAccountCreatorHandler:
         assert handle_create_account(self.acc_dict) == expected_dict
 
     def test_handle_create_account_returns_violation(self):
-        expected_dict = {'account': {'active-card': True,
-                                     'available-limit': 100}, 'violations': ['account-already-initialized']}
+        expected_dict = {
+            'account': {
+                'active-card': True,
+                'available-limit': 100
+            },
+            'violations': [ViolationEnum.ACCOUNT_ALREADY_EXISTS.value]
+        }
 
         assert handle_create_account(self.acc_dict) == expected_dict
 
