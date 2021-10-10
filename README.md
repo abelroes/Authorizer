@@ -57,9 +57,9 @@ python3 -m pytest
 Para rodar o projeto, é necessário preparar um arquivo `operations` contendo as entradas e rodar os seguintes comandos:
 ```shell
 docker build --no-cache -t authorizer .
-docker run -i authorizer < operations
+docker run -i authorizer < PATH_TO_operations_FILE
 ```
-Está incluído o script `buildAndRun.sh`, que considera o arquivo `operations` dentro do diretório raiz do projeto.
+Está incluído o script `buildAndRun.sh`, que considera um arquivo `operations` _(não incluso)_ dentro do diretório raiz do projeto.
 
 ### Arquitetura e Decisões Técnicas
 
@@ -67,7 +67,7 @@ Está incluído o script `buildAndRun.sh`, que considera o arquivo `operations` 
 O projeto está organizado utilizando a seguinte árvore de diretórios:
 
 ###### Main
-Início da execução da aplicação. Recebe o arquivo via _stdin_ e delega a digestão para _adapters_ e o processamento para _controllers_.
+Início da execução da aplicação. Recebe o arquivo via _stdin_, delega a digestão para _adapters_ e o processamento para _controllers_.
 
 ###### Adapters
 Responsáveis por reconhecer o "mundo exterior", definindo qual banco de dados será utilizado, como são as entradas e saídas do projeto, etc.
