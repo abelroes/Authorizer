@@ -1,13 +1,9 @@
 # Authorizer
 
->
-> Para visualizar melhor este README, fora do GitHub, utilize o [Markdown Live Preview](https://markdownlivepreview.com/) com este código.
->
-
-Sistema de autorização de operações de criação de conta e transações com cartão.
+Authorization system for account creation and card transactions.
 
 <details>
-<summary>Exemplo de entrada esperada:</summary>
+<summary>Expected input example:</summary>
   
 ```json
 {"account": {"active-card": true, "available-limit": 100}}
@@ -24,7 +20,7 @@ Sistema de autorização de operações de criação de conta e transações com
 
 
 <details>
-<summary>Exemplo de saída esperada:</summary>
+<summary>Expected output example:</summary>
 
 ```json
 {"account": {"active-card": true, "available-limit": 100}, "violations": []}
@@ -42,111 +38,111 @@ Sistema de autorização de operações de criação de conta e transações com
 
 -----
 
-## Índice
-- [Requisitos](#requisitos)
-- [Como rodar o projeto](#como-rodar-o-projeto)
-- [Arquitetura e Decisões Técnicas](#arquitetura-e-decisões-técnicas)
-- [Frameworks e Bibliotecas](#frameworks-e-bibliotecas)
-- [Outras observações](#outras-observações)
+## Index
+- [Requirements](#requirements)
+- [How to run the project](#how-to-run-the-project)
+- [Architecture and Technical Decisions](#architecture-and-technical-decisions)
+- [Frameworks and Libraries](#frameworks-and-libraries)
+- [Other Observations](#other-observations)
 
 -----
 
-### Requisitos
-> - Docker 20.10.8, contendo:
+### Requirements
+> - Docker 20.10.8, containing:
 > 
 >     * Python 3.8.10
->     * Gerenciador de pacotes pip
+>     * Pip package manager
 >     * pytest
 >     
 
-O build da imagem docker deveria dar conta de subir com todos os pré-requisitos para rodar o sistema.
-
-Além disso, o build já considera rodar os testes antes de rodar a aplicação (sem impedir que ela rode, em caso de falha).
-Se desejar rodar os testes manualmente, sugiro instalar um `virtual environment` para instalar as dependências.
-Neste caso, assumindo que já possua o `Python 3.8`, rode da linha de comando a partir do diretório raiz do projeto:
+The Docker image build should take care of setting up all the prerequisites to run the system.
+In addition, the build already considers running the tests before running the application (without preventing it from running, in case of failure).
+If you want to run the tests manually, I suggest installing a `virtual environment` to install the dependencies.
+In this case, assuming you already have `Python 3.8`, run from the command line from the project root directory:
 
 ```shell
-# Instalando PIP
+# Installing PIP
 python3 -m pip install --upgrade pip
 
-# Instalando virtualenv
+# Installing virtualenv
 python3 -m pip install virtualenv
 
-# Criando .venv - caso não funcione, troque o primeiro 'venv' por 'virtualenv'
+# Creating .venv - if it doesn't work, replace the first 'venv' with 'virtualenv'
 python3 -m venv .venv
 
-# Ativando venv
+# Activating venv
 source .venv/bin/activate
 
-# Instalando requirements.txt
+# Installing requirements.txt
 python3 -m pip install -r requirements.txt
 ```
 
-> fonte: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+> source: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 
-Esse processo instalará o `pytest` no ambiente virtual para que seja possível rodar os testes manualmente:
+This process will install `pytest` in the virtual environment so that you can run the tests manually:
 
 ```shell
 cd src/
 python3 -m pytest
 ```
 
-### Como rodar o projeto
-Para rodar o projeto, é necessário preparar um arquivo `operations` contendo as entradas e rodar os seguintes comandos:
+### How to run the project
+To run the project, you need to prepare an `operations` file containing the inputs and run the following commands:
 ```shell
 docker build --no-cache -t authorizer .
 
-# Definir path correto para o comando abaixo
+# Define file's correct path for the following command
 docker run -i authorizer < PATH_TO_operations_FILE
 ```
-Pode ser executado o script `buildAndRun.sh`, que considera um arquivo `operations` _(não incluso)_ dentro do diretório raiz do projeto.
+The `buildAndRun.sh` script can be executed, which considers an `operations` file _(not included)_ within the project root directory.
 
-### Arquitetura e Decisões Técnicas
+### Architecture and Technical Decisions
 
-#### Estrutura do Projeto
-O projeto está organizado utilizando a seguinte árvore de diretórios:
+#### Project Structure
+The project is organized using the following directory tree:
 
 ###### Main
-Início da execução da aplicação. Recebe o arquivo via _stdin_, delegando a digestão para _adapters_ e o processamento para _controllers_.
+Start of application execution. Receives the file via _stdin_, delegating digestion to _adapters_ and processing to _controllers_.
 
 ###### Adapters
-Responsáveis por intermediar o "mundo exterior", definindo qual banco de dados será utilizado, como são as entradas e saídas do projeto, etc.
-Concentram a maior parte das operações que gerenciam _side-effects_ da aplicação.
+Responsible for intermediating the "outside world", defining which database will be used, what the inputs and outputs of the project are like, etc.
+They concentrate most of the operations that manage the application's _side-effects_.
 
 ###### Controllers
-Separados em _formaters_, _handlers_ e _persistence_. Controlam fluxo, conversão de dados de entrada para camadas mais internas da aplicação (ex.: _models_ e _usecases_) e dados de saída para que _adapters_ possam realizar as ações de _output_.
+Separated into _formaters_, _handlers_ and _persistence_. They control flow, conversion of input data to more internal layers of the application (e.g.: _models_ and _usecases_) and output data so that _adapters_ can perform the _output_ actions.
 
-É a última camada que deveria tolerar métodos que causem _side-effects_.
+It is the last layer that should tolerate methods that cause _side-effects_.
 
-Destaque para a classe `OperationMapper`, que bifurca o fluxo logo no início, utilizando tipos diferentes de operações para decidir para qual função delegar o tratamento dos dados.
+Highlight for the `OperationMapper` class, which forks the flow right at the beginning, using different types of operations to decide which function to delegate data processing to.
 
 ###### Decorators
-Abrigam definições customizadas de _decorators_ que podem ser usados como _synthatic sugar_, adicionando mecanismos a outras funções. A exemplo, o decorator `@singleton`.
+It houses custom definitions of _decorators_ that can be used as _syntactic sugar_, adding mechanisms to other functions. For example, the `@singleton` decorator.
 
 ###### Models
-Abriga _dataclasses_ que representam entidades dentro da aplicação. Definem o formato de dados das operações para utilização pelos _controllers_ e _usecases_.
+It houses _dataclasses_ that represent entities within the application. Defines the operations data format for use by _controllers_ and _usecases_.
 
 ###### Usecases
-São as funções de regra de negócio, abrigando as definições das violações. Todas as violações de cada operação são decididas pelas funções nesse diretório.
+These are the business rule functions, housing the definitions of violations. All violations of each operation are decided by the functions in that directory.
 
 ###### Tests
-Diretório contendo os testes da aplicação.
+Directory containing application tests.
 
-#### Polimorfismo
-Apesar de Python ser uma linguagem dinamicamente tipada e o sistema ter sido escrito priorizando funções, optou-se por utilizar definições de classes com polimorfismo em alguns casos, a fim de facilitar a legibilidade e manutenção do código.
+#### Polymorphism
+Although Python is a dynamically typed language and the system was written prioritizing functions, it was decided to use class definitions with polymorphism in some cases, in order to facilitate code readability and maintenance.
 
-Por exemplo, ao definir os tipos esperados de entrada e saída de cada função, o polimorfismo permite que classes mais internas (ex.:_usecases_) não se preocupem com especificações de tipos de objetos transacionados, mas definam o escopo genérico esperado _(ex.: `GenericAccount -> StandardAccount`)_.
+For example, by defining the expected input and output types of each function, polymorphism allows inner classes (e.g., _usecases_) not to worry about specifications of types of transacted objects, but to define the expected generic scope (e.g., `GenericAccount -> StandardAccount`)_.
 
-#### Banco de Dados
-Utilizou-se um dicionário em memória para o armazenamento de dados de conta e histórico de transações validadas, permitindo fácil gerenciamento e rapidez na recuperação e persistência dos dados via mecanismo de chave-valor.
+#### Database
+It was used an in-memory dictionary for storing account data and validated transaction history, allowing easy management and rapid data retrieval and persistence via a key-value mechanism.
 
 #### Singleton
-Para que a gestão da instância do banco de dados escolhido fosse mais prática, utilizou-se o _design pattern Singleton_ para que, em qualquer parte do código, estivesse facilmente disponível a instância válida do banco. Além disso, a utilização do decorator `@singleton` torna a adição dessa capacidade mais elegante.
+To make managing the chosen database instance more practical, the _design pattern Singleton_ was used in a way that, in any part of the code, a valid instance of the bank was easily available. Additionally, using the `@singleton` decorator makes adding this capability more elegant.
 
-### Frameworks e Bibliotecas
-Além do `pytest` utilizado para os testes, foram usadas somente as bibliotecas disponibilizadas pelo Python 3.8. Exemplos são `json`, `datetieme`, `uuid`, `typing`, `dataclass`.
+### Frameworks and Libraries
+In addition to `pytest` used for testing, only the libraries provided by Python 3.8 were used. Examples are `json`, `datetieme`, `uuid`, `typing`, `dataclass`.
 
-### Outras observações
-A aplicação analisa as operações individualmente, mas processa o arquivo por inteiro. Isso significa que a resposta sai uma vez por _input_ de arquivo. Essa opção foi eleita por facilitar a gestão do estado da aplicação (que deve ser novo a cada arquivo de entrada) e tornar mais _clean_ o processo de análise das operações.
+### Other observations
+The application analyzes operations individually, but processes the file as a whole. This means that the response comes out once per file _input_.
+This option was chosen because it facilitates the management of the application state (which must be new for each input file) and makes the process of analyzing operations more _clean_.
 
-Uma otimização poderia ser feita, caso o tamanho do arquivo crescesse muito e a resposta fosse mais urgente para cada operação. Dessa forma, o retorno deveria ser individual.
+An optimization could be made if the file size grew a lot and the response was more urgent for each operation. Therefore, the return should be individual.
